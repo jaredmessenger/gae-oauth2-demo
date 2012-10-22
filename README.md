@@ -1,12 +1,13 @@
 gae-oauth2-demo
 ===============
 
-Using Google's AppEngine, Oauth2 and Python 2.7 to verify users
+Using Google's AppEngine, webapp2, Oauth2 and Python 2.7 to verify users
+To view example https://gae-oauth2.appspot.com/
 
 Setting up on localhost
+-----------------------
 _______________
-1.  Create a client_id and client_secret
-https://code.google.com/apis/console
+1.  Setup a project in the api console so we have a client_id and client_secret https://code.google.com/apis/console
 *  Create Project
 *  Click API Access
 *  Click Create an OAuth 2.0 client ID...
@@ -15,4 +16,6 @@ https://code.google.com/apis/console
 
 
 Setting up on appspot.com
+-------------------------
 _______________
+
