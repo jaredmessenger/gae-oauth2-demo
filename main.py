@@ -1,6 +1,3 @@
-"""
-App WSGI routing
-"""
 import webapp2
 
 import views
