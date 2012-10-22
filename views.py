@@ -3,10 +3,12 @@ import urllib2
 import cgi
 
 import webapp2
+import httplib2
 import jinja2
 import json
 
 from oauth2client.appengine import OAuth2Decorator
+from oauth2client.client import AccessTokenRefreshError
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -30,10 +32,22 @@ class LandingHandler(webapp2.RequestHandler):
             template = jinja_environment.get_template('templates/index.html')
             self.response.out.write(template.render(template_values))
         else :
-            http = decorator.http()
-            token = decorator.credentials.access_token
-            data = json.load(urllib2.urlopen('https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s' %token))
-            self.redirect('/%s' %data['id'])
+            try :
+                http = decorator.http()
+                token = decorator.credentials.access_token
+                authorized =json.load(urllib2.urlopen('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' %token))
+                # todo
+                # Check that the authorized data matches the oauth2 client data
+                data = json.load(urllib2.urlopen('https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s' %token))
+                self.redirect('/%s' %data['id'])
+                
+            except AccessTokenRefreshError:
+                template_values = {
+                    'url': decorator.authorize_url(),
+                }
+                template = jinja_environment.get_template('templates/index.html')
+                self.response.out.write(template.render(template_values))
+                
             
 class UserHandler(webapp2.RequestHandler):
     """
@@ -50,3 +64,4 @@ class UserHandler(webapp2.RequestHandler):
         else:
             self.error(401)
             self.response.out.write('access denied')
+    
