@@ -1,0 +1,25 @@
+application: gae-oauth2
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /static/css
+  static_dir: static/css
+
+- url: /static/js
+  static_dir: static/js
+  
+- url: /static/images
+  static_dir: static/images
+  
+- url: /oauth2callback
+  script: oauth2client.appengine.application
+  
+- url: /.*
+  script: main.app
+    
+libraries:
+- name: jinja2
+  version: latest
